@@ -1,15 +1,15 @@
 package com.luizgadao.interactivestory;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -20,40 +20,20 @@ public class MainActivity extends ActionBarActivity {
         setContentView( R.layout.activity_main );
         if ( savedInstanceState == null ) {
             getSupportFragmentManager().beginTransaction()
-                    .add( R.id.container, new PlaceholderFragment() )
+                    .add( R.id.container, new MainFragment() )
                     .commit();
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu ) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate( R.menu.menu_main, menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item ) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if ( id == R.id.action_settings ) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected( item );
     }
 
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class MainFragment extends Fragment {
 
-        public PlaceholderFragment() {
+        private EditText edName;
+        private Button btStart;
+
+        public MainFragment() {
         }
 
         @Override
@@ -61,6 +41,28 @@ public class MainActivity extends ActionBarActivity {
                                   Bundle savedInstanceState ) {
             View rootView = inflater.inflate( R.layout.fragment_main, container, false );
             return rootView;
+        }
+
+        @Override
+        public void onViewCreated( View view, @Nullable Bundle savedInstanceState ) {
+            super.onViewCreated( view, savedInstanceState );
+
+            edName = ( EditText ) view.findViewById( R.id.et_name );
+            btStart = ( Button ) view.findViewById( R.id.bt_start );
+
+            btStart.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick( View v ) {
+                    String name = edName.getText().toString();
+                    startStory( name );
+                }
+            } );
+        }
+
+        private void startStory(String name) {
+            Intent intent = new Intent( getActivity(), StoreActivity.class );
+            intent.putExtra( getString( R.string.name ), name  );
+            startActivity( intent );
         }
     }
 }
