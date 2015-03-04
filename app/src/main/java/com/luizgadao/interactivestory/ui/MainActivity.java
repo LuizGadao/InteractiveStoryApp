@@ -66,5 +66,12 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra( getString( R.string.name ), name  );
             startActivity( intent );
         }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+
+            edName.setText( "" );
+        }
     }
 }
